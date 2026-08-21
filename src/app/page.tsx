@@ -131,7 +131,7 @@ export default function Home() {
                 "
               />
 
-              <div className="relative h-full flex flex-col justify-center items-center">
+              <div className="relative min-h-[360px] h-full flex flex-col justify-center items-center">
 
                 <span
                   className="
@@ -325,7 +325,7 @@ export default function Home() {
                 "
               />
 
-              <div className="relative h-full flex flex-col items-center justify-center">
+              <div className="relative min-h-[240px] h-full flex flex-col items-center justify-center">
 
                 <span
                   className="
