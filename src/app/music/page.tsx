@@ -44,7 +44,7 @@ export default function Music() {
                 },
                 {
                     title: "Idle Nomenclature",
-                    file: "/music/idle-nomenclature.m4a",
+                    file: "/music/Idle-Nomenclature.m4a",
                 },
                 {
                     title: "unstable ceasefire",
