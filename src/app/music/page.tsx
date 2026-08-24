@@ -34,6 +34,17 @@ export default function Music() {
             subtitle: "debut instrumental album",
             description:
                 "The creation that culminated over a year of high stress highschool.",
+            longDescription:
+                        `pomegranate was a deeply personal project that I made over the course of approximately ten months.
+                        Those ten months were some of the most stressful I'd been through. Expectations, self-induced pressure, long
+                        hours of working. I just needed a place where every once in a while I could spill out everything inside using
+                        anything but words, because i was tired of expressing myself through words.
+                         And so, slowly, pomegranate was born.\n\n The album's title and the track titles are all intentional
+                        and have significance behind them. A pomegranate is a hard, reinforced fruit on the outside. One might think
+                        it's one piece, like an apple. But inside a pomegranate, hundreds of fragile, crystal-like, crimson pods. 
+                        Thin membranes separate each pod, much like the different parts of a mind can exist independently while still belonging to the same whole..
+                        \n\n
+                        "One does not get to witness the beauty of a pomegranate \nuntil he is curious enough to open it."\n-Me `,
             accent: "from-purple-900/60 to-pink-900/20",
             cover: "/music/covers/pomegranate-cover.jpg",
 
@@ -144,6 +155,8 @@ export default function Music() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [audioError, setAudioError] = useState(false);
+
+    const [selectedInfo, setSelectedInfo] = useState<number | null>(null);
 
 
     /*
@@ -1479,297 +1492,436 @@ export default function Music() {
                 </section>
 
 
-                {/* RELEASES */}
+{/* RELEASES */}
 
-                <section className="mb-24">
+<section className="mb-24">
 
-                    <div className="flex items-center gap-3 mb-8">
+    <div className="grid md:grid-cols-3 gap-5 items-stretch">
 
-                        <span className="text-xs font-mono text-purple-400">
-                            02 / RELEASE LIBRARY
-                        </span>
+        {releases.map((release, index) => {
 
-                        <div className="h-px flex-1 bg-zinc-900" />
+            const selected =
+                selectedRelease === index;
 
-                        <span className="text-xs font-mono text-zinc-700">
-                            {releases.length} RELEASES
-                        </span>
-
-                    </div>
+            const hasTracks =
+                release.tracks.length > 0;
 
 
-                    <div className="grid md:grid-cols-3 gap-5 items-stretch">
+            return (
 
-                        {releases.map((release, index) => {
+                <div
+                    key={release.title}
+                    onClick={() => selectRelease(index)}
+                    className="h-full cursor-pointer"
+                >
 
-                            const selected =
-                                selectedRelease === index;
+                    <div
+                        className={`
+                            group
+                            flex
+                            flex-col
+                            h-full
+                            text-left
+                            border
+                            rounded-xl
+                            overflow-hidden
+                            bg-zinc-950
+                            transition-all
+                            duration-500
+                            ${
+                                selected
+                                    ? "border-purple-500/60 shadow-[0_0_50px_rgba(168,85,247,0.08)]"
+                                    : "border-zinc-900 hover:border-purple-500/30"
+                            }
+                        `}
+                    >
 
-                            const hasTracks =
-                                release.tracks.length > 0;
+                        {/* ART */}
 
+                        <div
+                            className={`
+                                relative
+                                aspect-square
+                                bg-gradient-to-br
+                                ${release.accent}
+                                overflow-hidden
+                            `}
+                        >
 
-                            return (
+                            {release.cover ? (
 
-                                <button
-                                    key={release.title}
-                                    onClick={() =>
-                                        selectRelease(index)
-                                    }
-                                    className={`
-                                        group
-                                        flex
-                                        flex-col
-                                        text-left
-                                        border
-                                        rounded-xl
-                                        overflow-hidden
-                                        bg-zinc-950
-                                        transition-all
-                                        duration-500
-                                        ${
-                                            selected
-                                                ? "border-purple-500/60 shadow-[0_0_50px_rgba(168,85,247,0.08)]"
-                                                : "border-zinc-900 hover:border-purple-500/30"
-                                        }
-                                    `}
-                                >
+                                <>
 
-                                    {/* ART */}
-
+                                    <Image
+                                        src={release.cover}
+                                        alt={`${release.title} cover art`}
+                                        fill
+                                        className="
+                                            object-cover
+                                            transition-transform
+                                            duration-700
+                                            group-hover:scale-105
+                                        "
+                                    />
 
                                     <div
+                                        className="
+                                            absolute
+                                            inset-0
+                                            bg-black/10
+                                            group-hover:bg-black/0
+                                            transition-colors
+                                        "
+                                    />
+
+                                </>
+
+                            ) : (
+
+                                <>
+
+                                    {/* PLACEHOLDER ART */}
+
+                                    <div
+                                        className="
+                                            absolute
+                                            w-40
+                                            h-40
+                                            rounded-full
+                                            border
+                                            border-white/10
+                                            left-1/2
+                                            top-1/2
+                                            -translate-x-1/2
+                                            -translate-y-1/2
+                                            group-hover:scale-110
+                                            transition-transform
+                                            duration-700
+                                        "
+                                    />
+
+                                    <div
+                                        className="
+                                            absolute
+                                            w-24
+                                            h-24
+                                            rounded-full
+                                            border
+                                            border-white/10
+                                            left-1/2
+                                            top-1/2
+                                            -translate-x-1/2
+                                            -translate-y-1/2
+                                        "
+                                    />
+
+                                    <Music2
+                                        className="
+                                            absolute
+                                            left-1/2
+                                            top-1/2
+                                            -translate-x-1/2
+                                            -translate-y-1/2
+                                            text-white/40
+                                            group-hover:text-white
+                                            transition-colors
+                                        "
+                                        size={32}
+                                    />
+
+                                </>
+
+                            )}
+
+
+                            {/* YEAR */}
+
+                            <span
+                                className="
+                                    absolute
+                                    top-5
+                                    left-5
+                                    font-mono
+                                    text-xs
+                                    text-white/40
+                                "
+                            >
+                                {release.year}
+                            </span>
+
+
+                            {/* LOADED INDICATOR */}
+
+                            {selected && (
+
+                                <div
+                                    className="
+                                        absolute
+                                        bottom-5
+                                        right-5
+                                        flex
+                                        items-center
+                                        gap-2
+                                        px-3
+                                        py-1.5
+                                        rounded-full
+                                        bg-black/50
+                                        backdrop-blur-md
+                                        border
+                                        border-purple-400/30
+                                    "
+                                >
+
+                                    <span
                                         className={`
-                                            relative
-                                            aspect-square
-                                            bg-gradient-to-br
-                                            ${release.accent}
-                                            overflow-hidden
+                                            w-1.5
+                                            h-1.5
+                                            rounded-full
+                                            ${
+                                                isPlaying
+                                                    ? "bg-purple-400 animate-pulse"
+                                                    : "bg-purple-400/50"
+                                            }
                                         `}
-                                    >
-                                        {release.cover ? (
-                                            <>
-                                                <Image
-                                                    src={release.cover}
-                                                    alt={`${release.title} cover art`}
-                                                    fill
-                                                    className="
-                                                        object-cover
-                                                        transition-transform
-                                                        duration-700
-                                                        group-hover:scale-105
-                                                    "
-                                                />
+                                    />
 
-                                                <div
-                                                    className="
-                                                        absolute
-                                                        inset-0
-                                                        bg-black/10
-                                                        group-hover:bg-black/0
-                                                        transition-colors
-                                                    "
-                                                />
-                                            </>
-                                        ) : (
-                                            <>
-                                                {/* PLACEHOLDER ART */}
+                                    <span className="font-mono text-[10px] text-purple-300">
 
-                                                <div
-                                                    className="
-                                                        absolute
-                                                        w-40
-                                                        h-40
-                                                        rounded-full
-                                                        border
-                                                        border-white/10
-                                                        left-1/2
-                                                        top-1/2
-                                                        -translate-x-1/2
-                                                        -translate-y-1/2
-                                                        group-hover:scale-110
-                                                        transition-transform
-                                                        duration-700
-                                                    "
-                                                />
+                                        {isPlaying
+                                            ? "PLAYING"
+                                            : "LOADED"}
 
-                                                <div
-                                                    className="
-                                                        absolute
-                                                        w-24
-                                                        h-24
-                                                        rounded-full
-                                                        border
-                                                        border-white/10
-                                                        left-1/2
-                                                        top-1/2
-                                                        -translate-x-1/2
-                                                        -translate-y-1/2
-                                                    "
-                                                />
+                                    </span>
 
-                                                <Music2
-                                                    className="
-                                                        absolute
-                                                        left-1/2
-                                                        top-1/2
-                                                        -translate-x-1/2
-                                                        -translate-y-1/2
-                                                        text-white/40
-                                                        group-hover:text-white
-                                                        transition-colors
-                                                    "
-                                                    size={32}
-                                                />
-                                            </>
-                                        )}
+                                </div>
 
-                                        <span
-                                            className="
-                                                absolute
-                                                top-5
-                                                left-5
-                                                font-mono
-                                                text-xs
-                                                text-white/40
-                                            "
-                                        >
-                                            {release.year}
-                                        </span>
+                            )}
 
 
-                                        {/* LOADED INDICATOR */}
+                            {/* EMPTY INDICATOR */}
 
-                                        {selected && (
+                            {!hasTracks && !selected && (
 
-                                            <div
-                                                className="
-                                                    absolute
-                                                    bottom-5
-                                                    right-5
-                                                    flex
-                                                    items-center
-                                                    gap-2
-                                                    px-3
-                                                    py-1.5
-                                                    rounded-full
-                                                    bg-black/50
-                                                    backdrop-blur-md
-                                                    border
-                                                    border-purple-400/30
-                                                "
-                                            >
+                                <div
+                                    className="
+                                        absolute
+                                        bottom-5
+                                        right-5
+                                        px-3
+                                        py-1.5
+                                        rounded-full
+                                        bg-black/40
+                                        backdrop-blur-md
+                                        border
+                                        border-white/5
+                                    "
+                                >
 
-                                                <span
-                                                    className={`
-                                                        w-1.5
-                                                        h-1.5
-                                                        rounded-full
-                                                        ${
-                                                            isPlaying
-                                                                ? "bg-purple-400 animate-pulse"
-                                                                : "bg-purple-400/50"
-                                                        }
-                                                    `}
-                                                />
+                                    <span className="font-mono text-[10px] text-zinc-500">
+                                        COMING SOON
+                                    </span>
 
-                                                <span className="font-mono text-[10px] text-purple-300">
-                                                    {isPlaying
-                                                        ? "PLAYING"
-                                                        : "LOADED"}
-                                                </span>
+                                </div>
 
-                                            </div>
+                            )}
 
-                                        )}
+                        </div>
 
 
-                                        {/* EMPTY INDICATOR */}
+                        {/* INFO */}
 
-                                        {!hasTracks && !selected && (
+                        <div className="p-6 flex flex-col flex-1">
 
-                                            <div
-                                                className="
-                                                    absolute
-                                                    bottom-5
-                                                    right-5
-                                                    px-3
-                                                    py-1.5
-                                                    rounded-full
-                                                    bg-black/40
-                                                    backdrop-blur-md
-                                                    border
-                                                    border-white/5
-                                                "
-                                            >
+                            {/* TITLE + READ MORE */}
 
-                                                <span className="font-mono text-[10px] text-zinc-500">
-                                                    COMING SOON
-                                                </span>
+                            <div className="flex items-start justify-between gap-4">
 
-                                            </div>
+                                <div className="min-w-0">
 
-                                        )}
+                                    <p className="font-mono text-xs text-purple-400 mb-2">
+                                        {release.type}
+                                    </p>
 
-                                    </div>
+                                    <h3 className="text-xl font-bold">
+                                        {release.title}
+                                    </h3>
+
+                                </div>
 
 
-                                    {/* INFO */}
+                                {/* READ MORE */}
 
-                                    <div className="p-6">
-
-                                        <div className="flex justify-between items-start">
-
-                                            <div>
-
-                                                <p className="font-mono text-xs text-purple-400 mb-2">
-                                                    {release.type}
-                                                </p>
-
-                                                <h3 className="text-xl font-bold">
-                                                    {release.title}
-                                                </h3>
-
-                                            </div>
-
-
-                                            <ArrowUpRight
-                                                size={18}
-                                                className="
-                                                    text-zinc-700
-                                                    group-hover:text-purple-400
-                                                    group-hover:translate-x-1
-                                                    group-hover:-translate-y-1
-                                                    transition-all
-                                                "
-                                            />
-
-                                        </div>
-
-
-                                        <p className="mt-2 text-xs text-zinc-600 font-mono">
-                                            {release.tracks.length}{" "}
-                                            {release.tracks.length === 1
-                                                ? "track"
-                                                : "tracks"}
-                                        </p>
-
-
-                                        <p className="mt-4 text-sm text-zinc-600 leading-6">
-                                            {release.description}
-                                        </p>
-
-                                    </div>
-
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setSelectedInfo(index);
+                                    }}
+                                    className="
+                                        shrink-0
+                                        mt-1
+                                        px-3
+                                        py-1.5
+                                        rounded-md
+                                        border
+                                        border-zinc-800
+                                        bg-zinc-900/50
+                                        font-mono
+                                        text-[10px]
+                                        text-zinc-500
+                                        hover:border-purple-500/40
+                                        hover:text-purple-400
+                                        hover:bg-purple-500/5
+                                        transition-all
+                                    "
+                                >
+                                    Read More
                                 </button>
 
-                            );
+                            </div>
 
-                        })}
+
+                            {/* ARROW */}
+
+                            <ArrowUpRight
+                                size={18}
+                                className="
+                                    mt-4
+                                    text-zinc-700
+                                    group-hover:text-purple-400
+                                    group-hover:translate-x-1
+                                    group-hover:-translate-y-1
+                                    transition-all
+                                "
+                            />
+
+
+                            {/* TRACK COUNT */}
+
+                            <p className="mt-2 text-xs text-zinc-600 font-mono">
+
+                                {release.tracks.length}{" "}
+
+                                {release.tracks.length === 1
+                                    ? "track"
+                                    : "tracks"}
+
+                            </p>
+
+
+                            {/* DESCRIPTION */}
+
+                            <p className="mt-4 text-sm text-zinc-600 leading-6">
+                                {release.description}
+                            </p>
+
+                        </div>
 
                     </div>
 
-                </section>
+                </div>
+
+            );
+
+        })}
+
+    </div>
+
+</section>
+
+
+{/* RELEASE INFO MODAL */}
+
+{selectedInfo !== null && (
+
+    <div
+        className="
+            fixed
+            inset-0
+            z-50
+            flex
+            items-center
+            justify-center
+            p-6
+            bg-black/70
+            backdrop-blur-sm
+        "
+        onClick={() => setSelectedInfo(null)}
+    >
+
+        <div
+            className="
+                relative
+                w-full
+                max-w-2xl
+                max-h-[85vh]
+                overflow-y-auto
+                no-scrollbar
+                rounded-xl
+                border
+                border-zinc-800
+                bg-zinc-950
+                p-8
+                shadow-2xl
+            "
+            onClick={(e) => e.stopPropagation()}
+        >
+
+            {/* CLOSE */}
+
+            <button
+                type="button"
+                onClick={() => setSelectedInfo(null)}
+                className="
+                    absolute
+                    top-5
+                    right-5
+                    text-zinc-600
+                    hover:text-white
+                    transition-colors
+                    text-xl
+                "
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+
+            {/* HEADER */}
+
+            <p className="font-mono text-xs text-purple-400 mb-3">
+                {releases[selectedInfo].type}
+            </p>
+
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight pr-8">
+                {releases[selectedInfo].title}
+            </h2>
+
+            <p className="mt-2 font-mono text-xs text-zinc-600">
+                {releases[selectedInfo].year}
+            </p>
+
+
+            {/* DESCRIPTION */}
+
+            <div className="mt-8 border-t border-zinc-900 pt-8">
+
+                <p className="font-mono text-xs text-zinc-700 mb-4">
+                    ABOUT THIS RELEASE
+                </p>
+
+                <p className="text-sm md:text-base text-zinc-400 leading-7 whitespace-pre-line">
+                    {releases[selectedInfo].longDescription}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+)}
 
 
                 {/* SOUND DESIGN */}
