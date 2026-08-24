@@ -19,8 +19,8 @@ export default function Navbar() {
               ? "bg-purple-500"
               : "bg-green-400";
 
-  const musicColor = "text-purple-500"
-  const contactColor = pathname.startsWith("/contact") ? "text-orange-500" : "bg-purple-500";
+  const musicColor = "bg-purple-500"
+  const contactColor = "bg-orange-500"
 
   const programmingActive = pathname.startsWith("/programming");
   const musicActive = pathname.startsWith("/music");
